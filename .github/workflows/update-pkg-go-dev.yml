@@ -17,16 +17,11 @@ jobs:
 
       # Step 2: Request pkg.go.dev for rescan
       - name: Request pkg.go.dev update
-        uses: actions/http-client@v1
-        id: pkg_request
-        with:
-          url: https://pkg.go.dev/github.com/SeRj-ThuramS/go-container?tab=doc
-
-      # Step 3: Logging the result
-      - name: Log response
         run: |
-          echo "HTTP Status Code: ${{ steps.pkg_request.outputs.status_code }}"
-          if [ "${{ steps.pkg_request.outputs.status_code }}" != "200" ]; then
+          URL="https://pkg.go.dev/github.com/SeRj-ThuramS/go-container?tab=doc"
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$URL")
+          echo "HTTP Status Code: $STATUS"
+          if [ "$STATUS" != "200" ]; then
             echo "⚠️ Error updating pkg.go.dev"
             exit 1
           else
