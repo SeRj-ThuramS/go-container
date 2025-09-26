@@ -4,8 +4,8 @@ on:
   release:
     types: [published] # Trigger on a new GitHub release
   push:
-    branches:
-      - main # Or the branch where your main development happens
+    tags:
+      - v*.*.*
 
 jobs:
   update-pkg-go-dev:
