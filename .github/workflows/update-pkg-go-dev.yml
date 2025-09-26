@@ -1,0 +1,34 @@
+name: Update pkg.go.dev
+
+# Run when pushed to main and when creating vX.Y.Z tags
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  update-pkg:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Preparation
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      # Step 2: Request pkg.go.dev for rescan
+      - name: Request pkg.go.dev update
+        uses: actions/http-client@v1
+        id: pkg_request
+        with:
+          url: https://pkg.go.dev/github.com/SeRj-ThuramS/go-container?tab=doc
+
+      # Step 3: Logging the result
+      - name: Log response
+        run: |
+          echo "HTTP Status Code: ${{ steps.pkg_request.outputs.status_code }}"
+          if [ "${{ steps.pkg_request.outputs.status_code }}" != "200" ]; then
+            echo "⚠️ Error updating pkg.go.dev"
+            exit 1
+          else
+            echo "✅ pkg.go.dev successfully updated"
+          fi
