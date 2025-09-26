@@ -38,6 +38,7 @@ func RegisterRef[T any](initType ...*T) (RegisterStatus, error) {
 	// create new
 	if len(initType) == 0 {
 		providers[typeProvider] = new(T)
+
 		return RegisterCreate, nil
 	}
 
