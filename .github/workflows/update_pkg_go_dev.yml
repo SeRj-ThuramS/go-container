@@ -1,0 +1,35 @@
+name: Update pkg.go.dev
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  update-pkg:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Get latest tag
+        id: get_tag
+        run: |
+          TAG=$(git describe --tags --abbrev=0)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Request Go proxy update
+        run: |
+          MODULE="github.com/SeRj-ThuramS/go-container"
+          VERSION="${{ steps.get_tag.outputs.tag }}"
+          URL="https://proxy.golang.org/${MODULE}/@v/${VERSION}.info"
+          echo "Requesting $URL"
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$URL")
+          echo "HTTP Status Code: $STATUS"
+          if [ "$STATUS" != "200" ]; then
+            echo "⚠️ Ошибка при обновлении Go proxy"
+            exit 1
+          else
+            echo "✅ Go proxy успешно обновлён"
+          fi
