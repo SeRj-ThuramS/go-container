@@ -19,6 +19,8 @@ jobs:
           TAG=$(git describe --tags --abbrev=0)
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
+
+
       - name: Request Go proxy update
         run: |
           MODULE="github.com/!se!rj-!thuram!s/go-container"
