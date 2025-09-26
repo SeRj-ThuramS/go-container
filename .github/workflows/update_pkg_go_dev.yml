@@ -23,7 +23,7 @@ jobs:
         run: |
           MODULE="github.com/SeRj-ThuramS/go-container"
           VERSION="${{ steps.get_tag.outputs.tag }}"
-          URL="https://proxy.golang.org/${MODULE}/@v/${VERSION}.info"
+          URL="https://pkg.go.dev/${MODULE}@v${VERSION}"
           echo "Requesting $URL"
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$URL")
           echo "HTTP Status Code: $STATUS"
